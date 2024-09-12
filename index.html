@@ -64,6 +64,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        let myChart;  // Declare the chart globally so we can manage it
+
         function generateGraph() {
             const xValues = document.getElementById('xValues').value.split(',').map(Number);
             const yValues = document.getElementById('yValues').value.split(',').map(Number);
@@ -74,7 +76,14 @@
             const graphColor = document.getElementById('graphColor').value;
 
             const ctx = document.getElementById('myChart').getContext('2d');
-            new Chart(ctx, {
+
+            // Destroy the existing chart instance if it exists
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            // Create the new chart
+            myChart = new Chart(ctx, {
                 type: graphType,
                 data: {
                     labels: xValues,
@@ -83,7 +92,7 @@
                         data: yValues,
                         borderColor: graphColor,
                         backgroundColor: graphColor,
-                        fill: false
+                        fill: graphType === 'bar' ? true : false  // Fill bars but not lines
                     }]
                 },
                 options: {
