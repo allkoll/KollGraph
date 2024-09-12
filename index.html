@@ -29,12 +29,20 @@
             <input type="text" id="xValues" placeholder="e.g., 0, 5, 10">
         </div>
         <div class="form-group">
-            <label for="yValues1">Y Values 1 (comma-separated):</label>
+            <label for="yValues1">Y Values for Dataset 1 (comma-separated):</label>
             <input type="text" id="yValues1" placeholder="e.g., 20, 10, 5">
         </div>
         <div class="form-group">
-            <label for="yValues2">Y Values 2 (comma-separated):</label>
-            <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">  <!-- New input for second dataset -->
+            <label for="yValues2">Y Values for Dataset 2 (comma-separated):</label>
+            <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">
+        </div>
+        <div class="form-group">
+            <label for="dataset1Label">Dataset 1 Label:</label>
+            <input type="text" id="dataset1Label" placeholder="e.g., Metal Container">
+        </div>
+        <div class="form-group">
+            <label for="dataset2Label">Dataset 2 Label:</label>
+            <input type="text" id="dataset2Label" placeholder="e.g., Plastic Container">
         </div>
         <div class="form-group">
             <label for="graphType">Graph Type:</label>
@@ -45,7 +53,7 @@
         </div>
         <div class="form-group">
             <label for="graphTitle">Graph Title:</label>
-            <input type="text" id="graphTitle" placeholder="e.g., Temperature over Time">
+            <input type="text" id="graphTitle" placeholder="e.g., Ice Melting Time">
         </div>
         <div class="form-group">
             <label for="xTitle">X-Axis Title:</label>
@@ -53,15 +61,15 @@
         </div>
         <div class="form-group">
             <label for="yTitle">Y-Axis Title:</label>
-            <input type="text" id="yTitle" placeholder="e.g., Temperature (°C)">
+            <input type="text" id="yTitle" placeholder="e.g., Time to Melt Ice (minutes)">
         </div>
         <div class="form-group">
-            <label for="graphColor1">Graph Color 1:</label>
+            <label for="graphColor1">Color for Dataset 1:</label>
             <input type="color" id="graphColor1">
         </div>
         <div class="form-group">
-            <label for="graphColor2">Graph Color 2:</label>
-            <input type="color" id="graphColor2">  <!-- New input for second dataset's color -->
+            <label for="graphColor2">Color for Dataset 2:</label>
+            <input type="color" id="graphColor2">
         </div>
         <button onclick="generateGraph()">Generate Graph</button>
         <button onclick="downloadGraph()">Download Graph</button>
@@ -77,13 +85,15 @@
         function generateGraph() {
             const xValues = document.getElementById('xValues').value.split(',').map(Number);
             const yValues1 = document.getElementById('yValues1').value.split(',').map(Number);
-            const yValues2 = document.getElementById('yValues2').value.split(',').map(Number);  // Fetch second Y-values
+            const yValues2 = document.getElementById('yValues2').value.split(',').map(Number);
+            const dataset1Label = document.getElementById('dataset1Label').value || 'Dataset 1';
+            const dataset2Label = document.getElementById('dataset2Label').value || 'Dataset 2';
             const graphType = document.getElementById('graphType').value;
             const graphTitle = document.getElementById('graphTitle').value;
             const xTitle = document.getElementById('xTitle').value;
             const yTitle = document.getElementById('yTitle').value;
             const graphColor1 = document.getElementById('graphColor1').value;
-            const graphColor2 = document.getElementById('graphColor2').value;  // Fetch second dataset's color
+            const graphColor2 = document.getElementById('graphColor2').value;
 
             const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -97,14 +107,14 @@
                     labels: xValues,
                     datasets: [
                         {
-                            label: 'Dataset 1',
+                            label: dataset1Label,  // First dataset label
                             data: yValues1,
                             borderColor: graphColor1,
                             backgroundColor: graphType === 'bar' ? graphColor1 : 'transparent',
                             fill: graphType === 'bar' ? true : false
                         },
                         {
-                            label: 'Dataset 2',  // Second dataset for double graph
+                            label: dataset2Label,  // Second dataset label
                             data: yValues2,
                             borderColor: graphColor2,
                             backgroundColor: graphType === 'bar' ? graphColor2 : 'transparent',
