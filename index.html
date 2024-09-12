@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Generator</title>
+    <title>KollGraphs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Graph Generator</h1>
+        <h1>KollGraphs</h1>
         <div class="form-group">
             <label for="xValues">X Values (comma-separated):</label>
             <input type="text" id="xValues" placeholder="e.g., 0, 5, 10">
@@ -79,7 +79,7 @@
                 data: {
                     labels: xValues,
                     datasets: [{
-                        label: graphTitle,
+                        label: 'Data',
                         data: yValues,
                         borderColor: graphColor,
                         backgroundColor: graphColor,
@@ -87,17 +87,30 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: graphTitle,  // Graph Title
+                            font: {
+                                size: 18  // Adjust the font size if needed
+                            }
+                        },
+                        legend: {
+                            display: true,  // Show legend (key)
+                            position: 'right',  // Position the legend on the right side
+                        }
+                    },
                     scales: {
                         x: {
                             title: {
                                 display: true,
-                                text: xTitle
+                                text: xTitle  // X-Axis Title
                             }
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: yTitle
+                                text: yTitle  // Y-Axis Title
                             }
                         }
                     }
