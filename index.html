@@ -19,11 +19,21 @@
         canvas {
             border: 1px solid black;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>KollGraphs</h1>
+        <div class="form-group">
+            <label for="datasetOption">Choose Number of Datasets:</label>
+            <select id="datasetOption" onchange="toggleSecondDataset()">
+                <option value="one">One Dataset</option>
+                <option value="two">Two Datasets</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="xValues">X Values (comma-separated):</label>
             <input type="text" id="xValues" placeholder="e.g., 0, 5, 10">
@@ -32,17 +42,24 @@
             <label for="yValues1">Y Values for Dataset 1 (comma-separated):</label>
             <input type="text" id="yValues1" placeholder="e.g., 20, 10, 5">
         </div>
-        <div class="form-group">
-            <label for="yValues2">Y Values for Dataset 2 (comma-separated):</label>
-            <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">
+        <!-- Second dataset inputs, initially hidden -->
+        <div id="secondDataset" class="hidden">
+            <div class="form-group">
+                <label for="yValues2">Y Values for Dataset 2 (comma-separated):</label>
+                <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">
+            </div>
+            <div class="form-group">
+                <label for="dataset2Label">Dataset 2 Label:</label>
+                <input type="text" id="dataset2Label" placeholder="e.g., Plastic Container">
+            </div>
+            <div class="form-group">
+                <label for="graphColor2">Color for Dataset 2:</label>
+                <input type="color" id="graphColor2">
+            </div>
         </div>
         <div class="form-group">
             <label for="dataset1Label">Dataset 1 Label:</label>
             <input type="text" id="dataset1Label" placeholder="e.g., Metal Container">
-        </div>
-        <div class="form-group">
-            <label for="dataset2Label">Dataset 2 Label:</label>
-            <input type="text" id="dataset2Label" placeholder="e.g., Plastic Container">
         </div>
         <div class="form-group">
             <label for="graphType">Graph Type:</label>
@@ -67,10 +84,6 @@
             <label for="graphColor1">Color for Dataset 1:</label>
             <input type="color" id="graphColor1">
         </div>
-        <div class="form-group">
-            <label for="graphColor2">Color for Dataset 2:</label>
-            <input type="color" id="graphColor2">
-        </div>
         <button onclick="generateGraph()">Generate Graph</button>
         <button onclick="downloadGraph()">Download Graph</button>
 
@@ -82,45 +95,66 @@
     <script>
         let myChart;
 
+        // Function to show or hide the second dataset fields
+        function toggleSecondDataset() {
+            const datasetOption = document.getElementById('datasetOption').value;
+            const secondDataset = document.getElementById('secondDataset');
+            
+            if (datasetOption === 'two') {
+                secondDataset.classList.remove('hidden');
+            } else {
+                secondDataset.classList.add('hidden');
+            }
+        }
+
         function generateGraph() {
             const xValues = document.getElementById('xValues').value.split(',').map(Number);
             const yValues1 = document.getElementById('yValues1').value.split(',').map(Number);
-            const yValues2 = document.getElementById('yValues2').value.split(',').map(Number);
             const dataset1Label = document.getElementById('dataset1Label').value || 'Dataset 1';
-            const dataset2Label = document.getElementById('dataset2Label').value || 'Dataset 2';
             const graphType = document.getElementById('graphType').value;
             const graphTitle = document.getElementById('graphTitle').value;
             const xTitle = document.getElementById('xTitle').value;
             const yTitle = document.getElementById('yTitle').value;
             const graphColor1 = document.getElementById('graphColor1').value;
-            const graphColor2 = document.getElementById('graphColor2').value;
 
             const ctx = document.getElementById('myChart').getContext('2d');
-
+            
+            // Destroy the previous chart if it exists
             if (myChart) {
                 myChart.destroy();
+            }
+
+            // Build datasets based on user selection
+            let datasets = [
+                {
+                    label: dataset1Label,
+                    data: yValues1,
+                    borderColor: graphColor1,
+                    backgroundColor: graphType === 'bar' ? graphColor1 : 'transparent',
+                    fill: graphType === 'bar' ? true : false
+                }
+            ];
+
+            // If two datasets are selected, add the second dataset
+            if (document.getElementById('datasetOption').value === 'two') {
+                const yValues2 = document.getElementById('yValues2').value.split(',').map(Number);
+                const dataset2Label = document.getElementById('dataset2Label').value || 'Dataset 2';
+                const graphColor2 = document.getElementById('graphColor2').value;
+                
+                datasets.push({
+                    label: dataset2Label,
+                    data: yValues2,
+                    borderColor: graphColor2,
+                    backgroundColor: graphType === 'bar' ? graphColor2 : 'transparent',
+                    fill: graphType === 'bar' ? true : false
+                });
             }
 
             myChart = new Chart(ctx, {
                 type: graphType,
                 data: {
                     labels: xValues,
-                    datasets: [
-                        {
-                            label: dataset1Label,  // First dataset label
-                            data: yValues1,
-                            borderColor: graphColor1,
-                            backgroundColor: graphType === 'bar' ? graphColor1 : 'transparent',
-                            fill: graphType === 'bar' ? true : false
-                        },
-                        {
-                            label: dataset2Label,  // Second dataset label
-                            data: yValues2,
-                            borderColor: graphColor2,
-                            backgroundColor: graphType === 'bar' ? graphColor2 : 'transparent',
-                            fill: graphType === 'bar' ? true : false
-                        }
-                    ]
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
