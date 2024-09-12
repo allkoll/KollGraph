@@ -35,22 +35,22 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="xValues">X Values (comma-separated, text or numbers):</label>
-            <input type="text" id="xValues" placeholder="e.g., OPI, Sally Hansen, DCI">
+            <label for="xValues">X Labels (comma-separated, text or numbers):</label>
+            <input type="text" id="xValues">
         </div>
         <div class="form-group">
             <label for="yValues1">Y Values for Dataset 1 (comma-separated):</label>
-            <input type="text" id="yValues1" placeholder="e.g., 3, 2, 5">
+            <input type="text" id="yValues1">
         </div>
         <!-- Second dataset inputs, initially hidden -->
         <div id="secondDataset" class="hidden">
             <div class="form-group">
                 <label for="yValues2">Y Values for Dataset 2 (comma-separated):</label>
-                <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">
+                <input type="text" id="yValues2">
             </div>
             <div class="form-group">
                 <label for="dataset2Label">Dataset 2 Label:</label>
-                <input type="text" id="dataset2Label" placeholder="e.g., Plastic Container">
+                <input type="text" id="dataset2Label">
             </div>
             <div class="form-group">
                 <label for="graphColor2">Color for Dataset 2:</label>
@@ -59,7 +59,7 @@
         </div>
         <div class="form-group">
             <label for="dataset1Label">Dataset 1 Label:</label>
-            <input type="text" id="dataset1Label" placeholder="e.g., Metal Container">
+            <input type="text" id="dataset1Label">
         </div>
         <div class="form-group">
             <label for="graphType">Graph Type:</label>
@@ -70,15 +70,15 @@
         </div>
         <div class="form-group">
             <label for="graphTitle">Graph Title:</label>
-            <input type="text" id="graphTitle" placeholder="e.g., Ice Melting Time">
+            <input type="text" id="graphTitle">
         </div>
         <div class="form-group">
             <label for="xTitle">X-Axis Title:</label>
-            <input type="text" id="xTitle" placeholder="e.g., Brand Names">
+            <input type="text" id="xTitle">
         </div>
         <div class="form-group">
             <label for="yTitle">Y-Axis Title:</label>
-            <input type="text" id="yTitle" placeholder="e.g., Drying Time (minutes)">
+            <input type="text" id="yTitle">
         </div>
         <div class="form-group">
             <label for="graphColor1">Color for Dataset 1:</label>
@@ -108,7 +108,7 @@
         }
 
         function generateGraph() {
-            const xValues = document.getElementById('xValues').value.split(',').map(item => item.trim());  // Accept text or numbers
+            const xValues = document.getElementById('xValues').value.split(',').map(item => item.trim());
             const yValues1 = document.getElementById('yValues1').value.split(',').map(Number);
             const dataset1Label = document.getElementById('dataset1Label').value || 'Dataset 1';
             const graphType = document.getElementById('graphType').value;
@@ -153,7 +153,7 @@
             myChart = new Chart(ctx, {
                 type: graphType,
                 data: {
-                    labels: xValues,  // Accepts text or number labels
+                    labels: xValues,  // X-axis now supports text labels
                     datasets: datasets
                 },
                 options: {
