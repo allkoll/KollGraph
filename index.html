@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Graph Generator</h1>
+        <div class="form-group">
+            <label for="xValues">X Values (comma-separated):</label>
+            <input type="text" id="xValues" placeholder="e.g., 0, 5, 10">
+        </div>
+        <div class="form-group">
+            <label for="yValues">Y Values (comma-separated):</label>
+            <input type="text" id="yValues" placeholder="e.g., 20, 10, 5">
+        </div>
+        <div class="form-group">
+            <label for="graphType">Graph Type:</label>
+            <select id="graphType">
+                <option value="line">Line Graph</option>
+                <option value="bar">Bar Graph</option>
+                <option value="scatter">Scatter Plot</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="graphTitle">Graph Title:</label>
+            <input type="text" id="graphTitle" placeholder="e.g., Temperature over Time">
+        </div>
+        <div class="form-group">
+            <label for="xTitle">X-Axis Title:</label>
+            <input type="text" id="xTitle" placeholder="e.g., Time (min)">
+        </div>
+        <div class="form-group">
+            <label for="yTitle">Y-Axis Title:</label>
+            <input type="text" id="yTitle" placeholder="e.g., Temperature (°C)">
+        </div>
+        <div class="form-group">
+            <label for="graphColor">Graph Color:</label>
+            <input type="color" id="graphColor">
+        </div>
+        <button onclick="generateGraph()">Generate Graph</button>
+
+        <h2>Graph Output</h2>
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function generateGraph() {
+            const xValues = document.getElementById('xValues').value.split(',').map(Number);
+            const yValues = document.getElementById('yValues').value.split(',').map(Number);
+            const graphType = document.getElementById('graphType').value;
+            const graphTitle = document.getElementById('graphTitle').value;
+            const xTitle = document.getElementById('xTitle').value;
+            const yTitle = document.getElementById('yTitle').value;
+            const graphColor = document.getElementById('graphColor').value;
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: graphType,
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: graphTitle,
+                        data: yValues,
+                        borderColor: graphColor,
+                        backgroundColor: graphColor,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: xTitle
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: yTitle
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
