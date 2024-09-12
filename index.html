@@ -57,6 +57,7 @@
             <input type="color" id="graphColor">
         </div>
         <button onclick="generateGraph()">Generate Graph</button>
+        <button onclick="downloadGraph()">Download Graph</button>  <!-- New Download Button -->
 
         <h2>Graph Output</h2>
         <canvas id="myChart" width="400" height="400"></canvas>
@@ -64,7 +65,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let myChart;  // Declare the chart globally so we can manage it
+        let myChart;
 
         function generateGraph() {
             const xValues = document.getElementById('xValues').value.split(',').map(Number);
@@ -77,61 +78,61 @@
 
             const ctx = document.getElementById('myChart').getContext('2d');
 
-            // If the chart already exists, destroy it before creating a new one
             if (myChart) {
                 myChart.destroy();
             }
 
-            // Double-check that all form inputs are fetched correctly
-            if (!xValues.length || !yValues.length || !graphTitle || !xTitle || !yTitle || !graphColor) {
-                alert("Please fill in all fields correctly.");
-                return;
-            }
-
-            // Create a new chart instance
             myChart = new Chart(ctx, {
                 type: graphType,
                 data: {
                     labels: xValues,
                     datasets: [{
-                        label: 'Data',
+                        label: '',  // Optional: add a custom label for the dataset
                         data: yValues,
                         borderColor: graphColor,
-                        backgroundColor: graphColor,
-                        fill: graphType === 'bar' ? true : false  // Fill bars but not lines
+                        backgroundColor: graphType === 'bar' ? graphColor : 'transparent',
+                        fill: graphType === 'bar' ? true : false
                     }]
                 },
                 options: {
-                    responsive: true,  // Make it responsive to screen size
+                    responsive: true,
                     plugins: {
                         title: {
                             display: true,
-                            text: graphTitle,  // Graph Title
+                            text: graphTitle,
                             font: {
-                                size: 18  // Adjust the font size if needed
+                                size: 18
                             }
                         },
                         legend: {
-                            display: true,  // Show legend (key)
-                            position: 'right',  // Position the legend on the right side
+                            display: true,
+                            position: 'right'
                         }
                     },
                     scales: {
                         x: {
                             title: {
                                 display: true,
-                                text: xTitle  // X-Axis Title
+                                text: xTitle
                             }
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: yTitle  // Y-Axis Title
+                                text: yTitle
                             }
                         }
                     }
                 }
             });
+        }
+
+        // Function to download the chart as an image
+        function downloadGraph() {
+            const link = document.createElement('a');
+            link.href = document.getElementById('myChart').toDataURL();
+            link.download = 'kollgraph.png';  // Download filename
+            link.click();
         }
     </script>
 </body>
