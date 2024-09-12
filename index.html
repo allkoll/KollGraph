@@ -29,15 +29,18 @@
             <input type="text" id="xValues" placeholder="e.g., 0, 5, 10">
         </div>
         <div class="form-group">
-            <label for="yValues">Y Values (comma-separated):</label>
-            <input type="text" id="yValues" placeholder="e.g., 20, 10, 5">
+            <label for="yValues1">Y Values 1 (comma-separated):</label>
+            <input type="text" id="yValues1" placeholder="e.g., 20, 10, 5">
+        </div>
+        <div class="form-group">
+            <label for="yValues2">Y Values 2 (comma-separated):</label>
+            <input type="text" id="yValues2" placeholder="e.g., 15, 8, 3">  <!-- New input for second dataset -->
         </div>
         <div class="form-group">
             <label for="graphType">Graph Type:</label>
             <select id="graphType">
                 <option value="line">Line Graph</option>
                 <option value="bar">Bar Graph</option>
-                <option value="scatter">Scatter Plot</option>
             </select>
         </div>
         <div class="form-group">
@@ -53,11 +56,15 @@
             <input type="text" id="yTitle" placeholder="e.g., Temperature (°C)">
         </div>
         <div class="form-group">
-            <label for="graphColor">Graph Color:</label>
-            <input type="color" id="graphColor">
+            <label for="graphColor1">Graph Color 1:</label>
+            <input type="color" id="graphColor1">
+        </div>
+        <div class="form-group">
+            <label for="graphColor2">Graph Color 2:</label>
+            <input type="color" id="graphColor2">  <!-- New input for second dataset's color -->
         </div>
         <button onclick="generateGraph()">Generate Graph</button>
-        <button onclick="downloadGraph()">Download Graph</button>  <!-- New Download Button -->
+        <button onclick="downloadGraph()">Download Graph</button>
 
         <h2>Graph Output</h2>
         <canvas id="myChart" width="400" height="400"></canvas>
@@ -69,12 +76,14 @@
 
         function generateGraph() {
             const xValues = document.getElementById('xValues').value.split(',').map(Number);
-            const yValues = document.getElementById('yValues').value.split(',').map(Number);
+            const yValues1 = document.getElementById('yValues1').value.split(',').map(Number);
+            const yValues2 = document.getElementById('yValues2').value.split(',').map(Number);  // Fetch second Y-values
             const graphType = document.getElementById('graphType').value;
             const graphTitle = document.getElementById('graphTitle').value;
             const xTitle = document.getElementById('xTitle').value;
             const yTitle = document.getElementById('yTitle').value;
-            const graphColor = document.getElementById('graphColor').value;
+            const graphColor1 = document.getElementById('graphColor1').value;
+            const graphColor2 = document.getElementById('graphColor2').value;  // Fetch second dataset's color
 
             const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -86,13 +95,22 @@
                 type: graphType,
                 data: {
                     labels: xValues,
-                    datasets: [{
-                        label: '',  // Optional: add a custom label for the dataset
-                        data: yValues,
-                        borderColor: graphColor,
-                        backgroundColor: graphType === 'bar' ? graphColor : 'transparent',
-                        fill: graphType === 'bar' ? true : false
-                    }]
+                    datasets: [
+                        {
+                            label: 'Dataset 1',
+                            data: yValues1,
+                            borderColor: graphColor1,
+                            backgroundColor: graphType === 'bar' ? graphColor1 : 'transparent',
+                            fill: graphType === 'bar' ? true : false
+                        },
+                        {
+                            label: 'Dataset 2',  // Second dataset for double graph
+                            data: yValues2,
+                            borderColor: graphColor2,
+                            backgroundColor: graphType === 'bar' ? graphColor2 : 'transparent',
+                            fill: graphType === 'bar' ? true : false
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -127,11 +145,10 @@
             });
         }
 
-        // Function to download the chart as an image
         function downloadGraph() {
             const link = document.createElement('a');
             link.href = document.getElementById('myChart').toDataURL();
-            link.download = 'kollgraph.png';  // Download filename
+            link.download = 'kollgraph.png';
             link.click();
         }
     </script>
